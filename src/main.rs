@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use zombax::{
-    assets::{AssetInitSet, AssetsPlugin, ShooterAsset, ZombieAsset}, types::{Shooter, Zombie}, game::ZombiePlugin,
+    assets::{AssetInitSet, AssetsPlugin, ShooterAsset},
+    game::ZombiePlugin,
+    types::Shooter,
 };
 fn main() {
     App::new()
@@ -11,11 +13,7 @@ fn main() {
         .run();
 }
 
-fn setup(
-    mut commands: Commands,
-    zombie_asset: Res<ZombieAsset>,
-    shooter_asset: Res<ShooterAsset>
-) {
+fn setup(mut commands: Commands, shooter_asset: Res<ShooterAsset>) {
     commands.spawn(Camera2d);
 
     // Player
@@ -25,14 +23,4 @@ fn setup(
         MeshMaterial2d(shooter_asset.material.clone()),
         Transform::from_xyz(0.0, 0.0, 0.0),
     ));
-
-    // Zombies
-    for x in [-200.0, -100.0, 100.0, 200.0] {
-        commands.spawn((
-            Zombie,
-            Mesh2d(zombie_asset.mesh.clone()),
-            MeshMaterial2d(zombie_asset.material.clone()),
-            Transform::from_xyz(x, 200.0, 0.0),
-        ));
-    }
 }

@@ -12,6 +12,12 @@ pub struct ShooterAsset {
     pub material: Handle<ColorMaterial>,
 }
 
+#[derive(Resource)]
+pub struct BonusAsset {
+    pub mesh: Handle<Mesh>,
+    pub material: Handle<ColorMaterial>,
+}
+
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
 pub struct AssetInitSet;
 
@@ -34,13 +40,20 @@ fn setup_assets(
     // Materials
     let red = materials.add(Color::srgb(1.0, 0.0, 0.0));
     let green = materials.add(Color::srgb(0.0, 1.0, 0.0));
+    let blue = materials.add(Color::srgb(0.0, 0.0, 1.0));
 
     commands.insert_resource(ZombieAsset {
         mesh: mesh.clone(),
         material: green,
     });
+
     commands.insert_resource(ShooterAsset {
-        mesh,
+        mesh: mesh.clone(),
         material: red,
+    });
+
+    commands.insert_resource(BonusAsset {
+        mesh,
+        material: blue,
     });
 }
