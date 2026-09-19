@@ -1,11 +1,12 @@
 use bevy::prelude::*;
 use zombax::{
-    assets::{AssetInitSet, AssetsPlugin, ShooterAsset, ZombieAsset}, components::{Shooter, Zombie},
+    assets::{AssetInitSet, AssetsPlugin, ShooterAsset, ZombieAsset}, types::{Shooter, Zombie}, game::ZombiePlugin,
 };
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(AssetsPlugin)
+        .add_plugins(ZombiePlugin)
         .add_systems(Startup, setup.after(AssetInitSet))
         .run();
 }
