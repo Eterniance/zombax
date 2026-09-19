@@ -31,7 +31,7 @@ fn spawn_bonus(
             Bonus,
             Mesh2d(bonus_asset.mesh.clone()),
             MeshMaterial2d(bonus_asset.material.clone()),
-            Transform::from_xyz(400.0, 200.0, 0.0),
+            Transform::from_xyz(400.0, 400.0, 0.0),
         ));
     }
 }

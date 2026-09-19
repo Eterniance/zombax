@@ -29,7 +29,7 @@ fn endless_spawn(
                 Zombie,
                 Mesh2d(zombie_asset.mesh.clone()),
                 MeshMaterial2d(zombie_asset.material.clone()),
-                Transform::from_xyz(x, 200.0, 0.0),
+                Transform::from_xyz(x, 400.0, 0.0),
             ));
         }
     }
