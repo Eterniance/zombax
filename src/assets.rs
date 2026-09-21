@@ -30,7 +30,7 @@ impl Plugin for AssetsPlugin {
     }
 }
 
-fn setup_assets(
+pub fn setup_assets(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,

@@ -17,7 +17,7 @@ impl Plugin for ZombiePlugin {
     }
 }
 
-fn endless_spawn(
+pub fn endless_spawn(
     mut commands: Commands,
     time: Res<Time>,
     mut timer: ResMut<SpawnTimer>,
@@ -35,13 +35,13 @@ fn endless_spawn(
     }
 }
 
-fn move_zombies(q: Query<&mut Transform, With<Zombie>>) {
+pub fn move_zombies(q: Query<&mut Transform, With<Zombie>>) {
     for mut transform in q {
         transform.translation.y -= 1.0;
     }
 }
 
-fn despawn_zombies(mut commands: Commands, pos: Query<(Entity, &Transform), With<Zombie>>) {
+pub fn despawn_zombies(mut commands: Commands, pos: Query<(Entity, &Transform), With<Zombie>>) {
     for (entity, transform) in pos {
         if transform.translation.y < -200.0 {
             commands.entity(entity).despawn();
