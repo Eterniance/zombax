@@ -1,6 +1,5 @@
-use bevy::prelude::*;
-
 use crate::{assets::ZombieAsset, types::SpawnTimer};
+use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct Zombie;
@@ -14,7 +13,7 @@ impl Plugin for ZombiePlugin {
     }
 }
 
-pub fn endless_spawn(
+fn endless_spawn(
     mut commands: Commands,
     time: Res<Time>,
     mut timer: ResMut<SpawnTimer>,
@@ -32,13 +31,13 @@ pub fn endless_spawn(
     }
 }
 
-pub fn move_zombies(q: Query<&mut Transform, With<Zombie>>) {
+fn move_zombies(q: Query<&mut Transform, With<Zombie>>) {
     for mut transform in q {
         transform.translation.y -= 1.0;
     }
 }
 
-pub fn despawn_zombies(mut commands: Commands, pos: Query<(Entity, &Transform), With<Zombie>>) {
+fn despawn_zombies(mut commands: Commands, pos: Query<(Entity, &Transform), With<Zombie>>) {
     for (entity, transform) in pos {
         if transform.translation.y < -200.0 {
             commands.entity(entity).despawn();

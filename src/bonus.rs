@@ -1,9 +1,9 @@
-use bevy::prelude::*;
-
 use crate::{
     assets::BonusAsset,
     shooter::{MainShooter, SpawnShooter},
+    utils::detect_collision,
 };
+use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct Bonus;
@@ -23,7 +23,7 @@ impl Plugin for BonusPlugin {
     }
 }
 
-pub fn spawn_bonus(
+fn spawn_bonus(
     mut commands: Commands,
     time: Res<Time>,
     mut timer: ResMut<SpawnBonusTimer>,
@@ -39,13 +39,13 @@ pub fn spawn_bonus(
     }
 }
 
-pub fn move_bonus(q: Query<&mut Transform, With<Bonus>>) {
+fn move_bonus(q: Query<&mut Transform, With<Bonus>>) {
     for mut transform in q {
         transform.translation.y -= 1.5;
     }
 }
 
-pub fn collisions(
+fn collisions(
     mut commands: Commands,
     bonus_query: Query<(Entity, &Transform), With<Bonus>>,
     shooter_query: Query<&Transform, With<MainShooter>>,
@@ -66,18 +66,10 @@ pub fn collisions(
     }
 }
 
-pub fn despawn_bonus(mut commands: Commands, pos: Query<(Entity, &Transform), With<Bonus>>) {
+fn despawn_bonus(mut commands: Commands, pos: Query<(Entity, &Transform), With<Bonus>>) {
     for (entity, transform) in pos {
         if transform.translation.y < -300.0 {
             commands.entity(entity).despawn();
         }
     }
-}
-
-fn detect_collision(pos1: &Vec3, pos2: &Vec3, treshold: f32) -> bool {
-    let Vec3 { x: x1, y: y1, z: _ } = pos1;
-
-    let Vec3 { x: x2, y: y2, z: _ } = pos2;
-
-    (x1 - x2).abs() < treshold && (y1 - y2).abs() < treshold
 }

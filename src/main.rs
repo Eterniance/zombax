@@ -10,7 +10,7 @@ use zombax::{
     shooter::ShooterPlugin,
     zombie::ZombiePlugin,
 };
-pub fn main() {
+fn main() {
     App::new()
         .add_plugins((
             DefaultPlugins,
@@ -25,11 +25,11 @@ pub fn main() {
         .run();
 }
 
-pub fn setup(mut commands: Commands) {
+fn setup(mut commands: Commands) {
     commands.spawn(Camera2d);
 }
 
-pub fn debug_position(
+fn debug_position(
     keyboard: Res<ButtonInput<KeyCode>>,
     window: Single<&Window, With<PrimaryWindow>>,
     camera: Single<(&Camera, &GlobalTransform)>,

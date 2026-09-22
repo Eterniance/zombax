@@ -35,7 +35,7 @@ impl Plugin for ShooterPlugin {
     }
 }
 
-pub fn spawn_main_shooter(mut commands: Commands, shooter_asset: Res<ShooterAsset>) {
+fn spawn_main_shooter(mut commands: Commands, shooter_asset: Res<ShooterAsset>) {
     commands.spawn((
         MainShooter,
         Shooter,
@@ -45,7 +45,7 @@ pub fn spawn_main_shooter(mut commands: Commands, shooter_asset: Res<ShooterAsse
     ));
 }
 
-pub fn spawn_shooter(
+fn spawn_shooter(
     mut commands: Commands,
     main_shooter_q: Single<&Transform, With<MainShooter>>,
     shooters_q: Query<(), With<Shooter>>,
@@ -69,7 +69,7 @@ pub fn spawn_shooter(
     }
 }
 
-pub fn move_shooter(
+fn move_shooter(
     keyboard: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
     q: Query<&mut Transform, With<Shooter>>,

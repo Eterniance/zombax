@@ -1,6 +1,5 @@
-use bevy::prelude::*;
-
 use crate::{assets::BulletAsset, shooter::Shooter};
+use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct Bullet;
