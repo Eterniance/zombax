@@ -23,9 +23,15 @@ fn endless_spawn(
         for x in [-200.0, -100.0, 100.0, 200.0] {
             commands.spawn((
                 Zombie,
-                Mesh2d(zombie_asset.mesh.clone()),
-                MeshMaterial2d(zombie_asset.material.clone()),
-                Transform::from_xyz(x, 400.0, 0.0),
+                Sprite {
+                    image: zombie_asset.texture.clone(),
+                    ..default()
+                },
+                Transform {
+                    translation: vec3(x, 400.0, 0.0),
+                    scale: Vec3::splat(50.0 / 32.0),
+                    ..default()
+                },
                 HitBox::Box {
                     length: 50.0,
                     width: 50.0,

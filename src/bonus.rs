@@ -1,5 +1,7 @@
 use crate::{
-    assets::BonusAsset, collisions::{HitBox, collides}, shooter::{MainShooter, SpawnShooter},
+    assets::BonusAsset,
+    collisions::{HitBox, collides},
+    shooter::{MainShooter, SpawnShooter},
 };
 use bevy::prelude::*;
 
