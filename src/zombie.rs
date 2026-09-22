@@ -1,9 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{
-    assets::ZombieAsset,
-    types::{SpawnTimer},
-};
+use crate::{assets::ZombieAsset, types::SpawnTimer};
 
 #[derive(Component)]
 pub struct Zombie;

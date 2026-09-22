@@ -6,6 +6,7 @@ use bevy::{
 use zombax::{
     assets::{AssetInitSet, AssetsPlugin},
     bonus::BonusPlugin,
+    bullet::BulletPlugin,
     shooter::ShooterPlugin,
     zombie::ZombiePlugin,
 };
@@ -18,7 +19,7 @@ pub fn main() {
             // EntityCountDiagnosticsPlugin::default(),
         ))
         .add_plugins(AssetsPlugin)
-        .add_plugins((ZombiePlugin, BonusPlugin, ShooterPlugin))
+        .add_plugins((ZombiePlugin, BonusPlugin, ShooterPlugin, BulletPlugin))
         .add_systems(Startup, setup.after(AssetInitSet))
         .add_systems(Update, debug_position)
         .run();
@@ -35,10 +36,8 @@ pub fn debug_position(
 ) {
     if keyboard.just_pressed(KeyCode::F6)
         && let Some(cursor_position) = window.cursor_position()
-        && let Ok(world_position) = camera.0.viewport_to_world_2d(
-            camera.1,
-            cursor_position,
-        ) {
-            println!("vec2({},{}),", world_position.x, world_position.y);
-        }
+        && let Ok(world_position) = camera.0.viewport_to_world_2d(camera.1, cursor_position)
+    {
+        println!("vec2({},{}),", world_position.x, world_position.y);
+    }
 }

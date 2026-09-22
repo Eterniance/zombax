@@ -18,6 +18,12 @@ pub struct BonusAsset {
     pub material: Handle<ColorMaterial>,
 }
 
+#[derive(Resource)]
+pub struct BulletAsset {
+    pub mesh: Handle<Mesh>,
+    pub material: Handle<ColorMaterial>,
+}
+
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
 pub struct AssetInitSet;
 
@@ -35,25 +41,31 @@ pub fn setup_assets(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    let mesh = meshes.add(Rectangle::new(50.0, 50.0));
+    let square = meshes.add(Rectangle::new(50.0, 50.0));
+    let circle = meshes.add(Circle::new(5.0));
 
-    // Materials
     let red = materials.add(Color::srgb(1.0, 0.0, 0.0));
     let green = materials.add(Color::srgb(0.0, 1.0, 0.0));
     let blue = materials.add(Color::srgb(0.0, 0.0, 1.0));
+    let white = materials.add(Color::WHITE);
 
     commands.insert_resource(ZombieAsset {
-        mesh: mesh.clone(),
+        mesh: square.clone(),
         material: green,
     });
 
     commands.insert_resource(ShooterAsset {
-        mesh: mesh.clone(),
+        mesh: square.clone(),
         material: red,
     });
 
     commands.insert_resource(BonusAsset {
-        mesh,
+        mesh: square,
         material: blue,
+    });
+
+    commands.insert_resource(BulletAsset {
+        mesh: circle,
+        material: white,
     });
 }
