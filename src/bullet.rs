@@ -1,4 +1,9 @@
-use crate::{assets::BulletAsset, shooter::Shooter};
+use crate::{
+    assets::BulletAsset,
+    collisions::{HitBox, collides},
+    shooter::Shooter,
+    zombie::Zombie,
+};
 use bevy::prelude::*;
 
 #[derive(Component)]
@@ -12,7 +17,10 @@ pub struct BulletPlugin;
 impl Plugin for BulletPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(BulletTimer(Timer::from_seconds(1.0, TimerMode::Repeating)))
-            .add_systems(Update, (spawn_bullets, move_bullets));
+            .add_systems(
+                Update,
+                (spawn_bullets, move_bullets, detect_bullet_collision),
+            );
     }
 }
 
@@ -30,6 +38,7 @@ fn spawn_bullets(
                 Mesh2d(asset.mesh.clone()),
                 MeshMaterial2d(asset.material.clone()),
                 (*transform),
+                HitBox::Circle { radius: 5.0 },
             ));
         }
     }
@@ -39,5 +48,26 @@ fn move_bullets(time: Res<Time>, q: Query<&mut Transform, With<Bullet>>) {
     let speed = 200.0;
     for mut transform in q {
         transform.translation.y += speed * time.delta_secs();
+    }
+}
+
+fn detect_bullet_collision(
+    mut commands: Commands,
+    bullet_query: Query<(Entity, &Transform, &HitBox), With<Bullet>>,
+    zombie_query: Query<(Entity, &Transform, &HitBox), With<Zombie>>,
+) {
+    for (bullet, b_transform, b_hitbox) in &bullet_query {
+        for (zombie, z_transform, z_hitbox) in &zombie_query {
+            if collides(
+                b_transform.translation.truncate(),
+                b_hitbox,
+                z_transform.translation.truncate(),
+                z_hitbox,
+            ) {
+                info!("Collision detected");
+                commands.entity(bullet).despawn();
+                commands.entity(zombie).despawn();
+            }
+        }
     }
 }

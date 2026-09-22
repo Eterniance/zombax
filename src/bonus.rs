@@ -1,7 +1,5 @@
 use crate::{
-    assets::BonusAsset,
-    shooter::{MainShooter, SpawnShooter},
-    utils::detect_collision,
+    assets::BonusAsset, collisions::{HitBox, collides}, shooter::{MainShooter, SpawnShooter},
 };
 use bevy::prelude::*;
 
@@ -35,6 +33,10 @@ fn spawn_bonus(
             Mesh2d(bonus_asset.mesh.clone()),
             MeshMaterial2d(bonus_asset.material.clone()),
             Transform::from_xyz(400.0, 400.0, 0.0),
+            HitBox::Box {
+                length: 50.0,
+                width: 50.0,
+            },
         ));
     }
 }
@@ -47,16 +49,17 @@ fn move_bonus(q: Query<&mut Transform, With<Bonus>>) {
 
 fn collisions(
     mut commands: Commands,
-    bonus_query: Query<(Entity, &Transform), With<Bonus>>,
-    shooter_query: Query<&Transform, With<MainShooter>>,
+    bonus_query: Query<(Entity, &Transform, &HitBox), With<Bonus>>,
+    shooter_query: Query<(&Transform, &HitBox), With<MainShooter>>,
     mut message_writer: MessageWriter<SpawnShooter>,
 ) {
-    for (bonus_entity, bonus_transform) in &bonus_query {
-        for shooter_transform in &shooter_query {
-            if detect_collision(
-                &shooter_transform.translation,
-                &bonus_transform.translation,
-                50.0,
+    for (bonus_entity, bonus_transform, bonus_hitbox) in &bonus_query {
+        for (shooter_transform, shooter_hitbox) in &shooter_query {
+            if collides(
+                bonus_transform.translation.truncate(),
+                bonus_hitbox,
+                shooter_transform.translation.truncate(),
+                shooter_hitbox,
             ) {
                 message_writer.write(SpawnShooter);
                 commands.entity(bonus_entity).despawn();

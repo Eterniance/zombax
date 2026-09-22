@@ -1,4 +1,7 @@
-use crate::assets::{AssetInitSet, ShooterAsset};
+use crate::{
+    assets::{AssetInitSet, ShooterAsset},
+    collisions::HitBox,
+};
 use bevy::prelude::*;
 
 #[rustfmt::skip]
@@ -42,6 +45,10 @@ fn spawn_main_shooter(mut commands: Commands, shooter_asset: Res<ShooterAsset>) 
         Mesh2d(shooter_asset.mesh.clone()),
         MeshMaterial2d(shooter_asset.material.clone()),
         Transform::from_xyz(0.0, -200.0, 0.0),
+        HitBox::Box {
+            length: 50.0,
+            width: 50.0,
+        },
     ));
 }
 
@@ -62,6 +69,10 @@ fn spawn_shooter(
             Mesh2d(shooter_asset.mesh.clone()),
             MeshMaterial2d(shooter_asset.material.clone()),
             Transform::from_translation(world_pos),
+            HitBox::Box {
+                length: 50.0,
+                width: 50.0,
+            },
         ));
     } else {
         // commands.spawn(Shooter);

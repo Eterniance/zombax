@@ -1,4 +1,4 @@
-use crate::{assets::ZombieAsset, types::SpawnTimer};
+use crate::{assets::ZombieAsset, collisions::HitBox, types::SpawnTimer};
 use bevy::prelude::*;
 
 #[derive(Component)]
@@ -26,6 +26,10 @@ fn endless_spawn(
                 Mesh2d(zombie_asset.mesh.clone()),
                 MeshMaterial2d(zombie_asset.material.clone()),
                 Transform::from_xyz(x, 400.0, 0.0),
+                HitBox::Box {
+                    length: 50.0,
+                    width: 50.0,
+                },
             ));
         }
     }
