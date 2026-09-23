@@ -42,9 +42,15 @@ fn spawn_main_shooter(mut commands: Commands, shooter_asset: Res<ShooterAsset>) 
     commands.spawn((
         MainShooter,
         Shooter,
-        Mesh2d(shooter_asset.mesh.clone()),
-        MeshMaterial2d(shooter_asset.material.clone()),
-        Transform::from_xyz(0.0, -200.0, 0.0),
+        Sprite {
+            image: shooter_asset.texture.clone(),
+            ..Default::default()
+        },
+        Transform {
+            translation: vec3(0.0, -200.0, 0.0),
+            scale: Vec3::splat(50.0 / 32.0),
+            ..Default::default()
+        },
         HitBox::Box {
             length: 50.0,
             width: 50.0,
@@ -66,9 +72,15 @@ fn spawn_shooter(
 
         commands.spawn((
             Shooter,
-            Mesh2d(shooter_asset.mesh.clone()),
-            MeshMaterial2d(shooter_asset.material.clone()),
-            Transform::from_translation(world_pos),
+            Sprite {
+                image: shooter_asset.texture.clone(),
+                ..Default::default()
+            },
+            Transform {
+                translation: world_pos,
+                scale: Vec3::splat(50.0 / 32.0),
+                ..Default::default()
+            },
             HitBox::Box {
                 length: 50.0,
                 width: 50.0,

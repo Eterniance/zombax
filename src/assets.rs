@@ -7,14 +7,12 @@ pub struct ZombieAsset {
 
 #[derive(Resource)]
 pub struct ShooterAsset {
-    pub mesh: Handle<Mesh>,
-    pub material: Handle<ColorMaterial>,
+    pub texture: Handle<Image>,
 }
 
 #[derive(Resource)]
 pub struct BonusAsset {
-    pub mesh: Handle<Mesh>,
-    pub material: Handle<ColorMaterial>,
+    pub texture: Handle<Image>,
 }
 
 #[derive(Resource)]
@@ -42,12 +40,11 @@ fn setup_assets(
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     let zombie_texture = asset_server.load("zombax1.png");
+    let bonus_texture = asset_server.load("bonus_plus_1.png");
+    let shooter_texture = asset_server.load("shooter1.png");
 
-    let square = meshes.add(Rectangle::new(50.0, 50.0));
     let circle = meshes.add(Circle::new(5.0));
 
-    let red = materials.add(Color::srgb(1.0, 0.0, 0.0));
-    let blue = materials.add(Color::srgb(0.0, 0.0, 1.0));
     let white = materials.add(Color::WHITE);
 
     commands.insert_resource(ZombieAsset {
@@ -55,13 +52,11 @@ fn setup_assets(
     });
 
     commands.insert_resource(ShooterAsset {
-        mesh: square.clone(),
-        material: red,
+        texture: shooter_texture,
     });
 
     commands.insert_resource(BonusAsset {
-        mesh: square,
-        material: blue,
+        texture: bonus_texture,
     });
 
     commands.insert_resource(BulletAsset {

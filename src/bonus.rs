@@ -32,8 +32,10 @@ fn spawn_bonus(
     if timer.0.tick(time.delta()).just_finished() {
         commands.spawn((
             Bonus,
-            Mesh2d(bonus_asset.mesh.clone()),
-            MeshMaterial2d(bonus_asset.material.clone()),
+            Sprite {
+                image: bonus_asset.texture.clone(),
+                ..default()
+            },
             Transform::from_xyz(400.0, 400.0, 0.0),
             HitBox::Box {
                 length: 50.0,

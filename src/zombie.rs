@@ -32,9 +32,8 @@ fn endless_spawn(
                     scale: Vec3::splat(50.0 / 32.0),
                     ..default()
                 },
-                HitBox::Box {
-                    length: 50.0,
-                    width: 50.0,
+                HitBox::Circle {
+                    radius: 32.0,
                 },
             ));
         }
