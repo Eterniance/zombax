@@ -20,7 +20,7 @@ fn endless_spawn(
     zombie_asset: Res<ZombieAsset>,
 ) {
     if timer.0.tick(time.delta()).just_finished() {
-        for x in [-200.0, -100.0, 100.0, 200.0] {
+        for x in linspace(-200.0, 200.0, 20) {
             commands.spawn((
                 Zombie,
                 Sprite {
@@ -53,3 +53,71 @@ fn despawn_zombies(mut commands: Commands, pos: Query<(Entity, &Transform), With
         }
     }
 }
+
+fn linspace(start: f32, end: f32, capacity: usize) -> Vec<f32> {
+    match capacity {
+        0 => Vec::new(),
+        1 => vec![start],
+        _ => {
+            let increment = (end - start) / (capacity - 1) as f32;
+
+            (0..capacity)
+                .map(|i| start + increment * i as f32)
+                .collect()
+        }
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn empty() {
+        assert_eq!(linspace(0.0, 10.0, 0), Vec::<f32>::new());
+    }
+
+    #[test]
+    fn one_element() {
+        assert_eq!(linspace(0.0, 10.0, 1), vec![0.0]);
+    }
+
+    #[test]
+    fn normal_range() {
+        assert_eq!(
+            linspace(0.0, 10.0, 5),
+            vec![0.0, 2.5, 5.0, 7.5, 10.0]
+        );
+    }
+
+    #[test]
+    fn two_elements() {
+        assert_eq!(linspace(0.0, 10.0, 2), vec![0.0, 10.0]);
+    }
+
+    #[test]
+    fn decreasing_range() {
+        assert_eq!(
+            linspace(10.0, 0.0, 5),
+            vec![10.0, 7.5, 5.0, 2.5, 0.0]
+        );
+    }
+
+    #[test]
+    fn negative_range() {
+        assert_eq!(
+            linspace(-10.0, 10.0, 5),
+            vec![-10.0, -5.0, 0.0, 5.0, 10.0]
+        );
+    }
+
+    #[test]
+    fn same_start_and_end() {
+        assert_eq!(
+            linspace(5.0, 5.0, 4),
+            vec![5.0, 5.0, 5.0, 5.0]
+        );
+    }
+}
+
