@@ -11,7 +11,7 @@ pub struct ZombiePlugin;
 
 impl Plugin for ZombiePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(SpawnZombieTimer(Timer::from_seconds(1.0, TimerMode::Repeating)))
+        app.insert_resource(SpawnZombieTimer(Timer::from_seconds(0.75, TimerMode::Repeating)))
             .add_systems(Update, (move_zombies, endless_spawn, despawn_zombies));
     }
 }
@@ -22,6 +22,7 @@ fn endless_spawn(
     mut timer: ResMut<SpawnZombieTimer>,
     zombie_asset: Res<ZombieAsset>,
 ) {
+
     if timer.0.tick(time.delta()).just_finished() {
         for x in linspace(-200.0, 200.0, 20) {
             commands.spawn((
@@ -45,6 +46,7 @@ fn move_zombies(time: Res<Time>, q: Query<&mut Transform, With<Zombie>>) {
     let speed = 50.0;
     for mut transform in q {
         transform.translation.y -= speed * time.delta_secs();
+        transform.translation.z = -transform.translation.y;
     }
 }
 

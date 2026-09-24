@@ -16,7 +16,7 @@ pub struct BonusPlugin;
 impl Plugin for BonusPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(SpawnBonusTimer(Timer::from_seconds(
-            1.0,
+            0.5,
             TimerMode::Repeating,
         )))
         .add_systems(Update, (move_bonus, spawn_bonus, despawn_bonus, collisions));
@@ -49,6 +49,7 @@ fn move_bonus(time: Res<Time>, q: Query<&mut Transform, With<Bonus>>) {
     let speed = 150.0;
     for mut transform in q {
         transform.translation.y -= speed * time.delta_secs();
+        transform.translation.z = -transform.translation.y;
     }
 }
 
