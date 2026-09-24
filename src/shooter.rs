@@ -48,7 +48,7 @@ fn spawn_main_shooter(mut commands: Commands, shooter_asset: Res<ShooterAsset>) 
         },
         Transform {
             translation: vec3(0.0, -200.0, 0.0),
-            scale: Vec3::splat(50.0 / 32.0),
+            scale: Vec3::splat(65.0 / 32.0),
             ..Default::default()
         },
         HitBox::Box {

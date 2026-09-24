@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use crate::bullet::BULLET_RADIUS;
 
 #[derive(Resource)]
 pub struct ZombieAsset {
@@ -43,7 +44,7 @@ fn setup_assets(
     let bonus_texture = asset_server.load("bonus_plus_1.png");
     let shooter_texture = asset_server.load("shooter1.png");
 
-    let circle = meshes.add(Circle::new(5.0));
+    let circle = meshes.add(Circle::new(BULLET_RADIUS));
 
     let white = materials.add(Color::WHITE);
 

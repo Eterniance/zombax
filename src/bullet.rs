@@ -6,6 +6,8 @@ use crate::{
 };
 use bevy::prelude::*;
 
+pub const BULLET_RADIUS: f32 = 1.0;
+
 #[derive(Component)]
 pub struct Bullet;
 
@@ -38,7 +40,7 @@ fn spawn_bullets(
                 Mesh2d(asset.mesh.clone()),
                 MeshMaterial2d(asset.material.clone()),
                 (*transform),
-                HitBox::Circle { radius: 5.0 },
+                HitBox::Circle { radius: BULLET_RADIUS },
             ));
         }
     }
