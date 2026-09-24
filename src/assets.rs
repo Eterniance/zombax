@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::bullet::BULLET_RADIUS;
+use bevy::prelude::*;
 
 #[derive(Resource)]
 pub struct ZombieAsset {

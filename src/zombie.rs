@@ -32,9 +32,7 @@ fn endless_spawn(
                     scale: Vec3::splat(50.0 / 32.0),
                     ..default()
                 },
-                HitBox::Circle {
-                    radius: 32.0,
-                },
+                HitBox::Circle { radius: 32.0 },
             ));
         }
     }
@@ -68,7 +66,6 @@ fn linspace(start: f32, end: f32, capacity: usize) -> Vec<f32> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -85,10 +82,7 @@ mod tests {
 
     #[test]
     fn normal_range() {
-        assert_eq!(
-            linspace(0.0, 10.0, 5),
-            vec![0.0, 2.5, 5.0, 7.5, 10.0]
-        );
+        assert_eq!(linspace(0.0, 10.0, 5), vec![0.0, 2.5, 5.0, 7.5, 10.0]);
     }
 
     #[test]
@@ -98,26 +92,16 @@ mod tests {
 
     #[test]
     fn decreasing_range() {
-        assert_eq!(
-            linspace(10.0, 0.0, 5),
-            vec![10.0, 7.5, 5.0, 2.5, 0.0]
-        );
+        assert_eq!(linspace(10.0, 0.0, 5), vec![10.0, 7.5, 5.0, 2.5, 0.0]);
     }
 
     #[test]
     fn negative_range() {
-        assert_eq!(
-            linspace(-10.0, 10.0, 5),
-            vec![-10.0, -5.0, 0.0, 5.0, 10.0]
-        );
+        assert_eq!(linspace(-10.0, 10.0, 5), vec![-10.0, -5.0, 0.0, 5.0, 10.0]);
     }
 
     #[test]
     fn same_start_and_end() {
-        assert_eq!(
-            linspace(5.0, 5.0, 4),
-            vec![5.0, 5.0, 5.0, 5.0]
-        );
+        assert_eq!(linspace(5.0, 5.0, 4), vec![5.0, 5.0, 5.0, 5.0]);
     }
 }
-

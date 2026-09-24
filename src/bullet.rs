@@ -40,7 +40,9 @@ fn spawn_bullets(
                 Mesh2d(asset.mesh.clone()),
                 MeshMaterial2d(asset.material.clone()),
                 (*transform),
-                HitBox::Circle { radius: BULLET_RADIUS },
+                HitBox::Circle {
+                    radius: BULLET_RADIUS,
+                },
             ));
         }
     }
