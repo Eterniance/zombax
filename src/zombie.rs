@@ -1,5 +1,8 @@
-use crate::{assets::ZombieAsset, collisions::HitBox, types::SpawnTimer};
+use crate::{assets::ZombieAsset, collisions::HitBox};
 use bevy::prelude::*;
+
+#[derive(Resource)]
+pub struct SpawnZombieTimer(pub Timer);
 
 #[derive(Component)]
 pub struct Zombie;
@@ -8,7 +11,7 @@ pub struct ZombiePlugin;
 
 impl Plugin for ZombiePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(SpawnTimer(Timer::from_seconds(2.0, TimerMode::Repeating)))
+        app.insert_resource(SpawnZombieTimer(Timer::from_seconds(1.0, TimerMode::Repeating)))
             .add_systems(Update, (move_zombies, endless_spawn, despawn_zombies));
     }
 }
@@ -16,7 +19,7 @@ impl Plugin for ZombiePlugin {
 fn endless_spawn(
     mut commands: Commands,
     time: Res<Time>,
-    mut timer: ResMut<SpawnTimer>,
+    mut timer: ResMut<SpawnZombieTimer>,
     zombie_asset: Res<ZombieAsset>,
 ) {
     if timer.0.tick(time.delta()).just_finished() {
@@ -32,15 +35,16 @@ fn endless_spawn(
                     scale: Vec3::splat(50.0 / 32.0),
                     ..default()
                 },
-                HitBox::Circle { radius: 32.0 },
+                HitBox::Circle { radius: 16.0 },
             ));
         }
     }
 }
 
-fn move_zombies(q: Query<&mut Transform, With<Zombie>>) {
+fn move_zombies(time: Res<Time>, q: Query<&mut Transform, With<Zombie>>) {
+    let speed = 50.0;
     for mut transform in q {
-        transform.translation.y -= 1.0;
+        transform.translation.y -= speed * time.delta_secs();
     }
 }
 

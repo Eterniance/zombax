@@ -45,9 +45,10 @@ fn spawn_bonus(
     }
 }
 
-fn move_bonus(q: Query<&mut Transform, With<Bonus>>) {
+fn move_bonus(time: Res<Time>, q: Query<&mut Transform, With<Bonus>>) {
+    let speed = 150.0;
     for mut transform in q {
-        transform.translation.y -= 1.5;
+        transform.translation.y -= speed * time.delta_secs();
     }
 }
 
