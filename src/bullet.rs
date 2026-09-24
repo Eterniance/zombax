@@ -69,6 +69,7 @@ fn detect_bullet_collision(
                 info!("Collision detected");
                 commands.entity(bullet).despawn();
                 commands.entity(zombie).despawn();
+                break;
             }
         }
     }
