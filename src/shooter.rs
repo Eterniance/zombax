@@ -5,13 +5,30 @@ use crate::{
 use bevy::prelude::*;
 
 #[rustfmt::skip]
-const FORMATION: &[Vec2] = &[
-                    vec2(0.0, 80.0),
-        vec2(-48.0, 60.0),      vec2(48.0, 60.0),    
-    vec2(-60.0, 0.0),               vec2(60.0, 0.0),
-        vec2(-48.0, -60.0),     vec2(48.0, -60.0),
-                    vec2(0.0, -80.0),
+const FORMATION: &[Vec3] = &[
+                    vec3(  0.0,  55.0, -55.0),
+
+             vec3(-30.0,  35.0, -35.0), vec3(30.0,  35.0, -35.0),
+
+        vec3(-45.0,  15.0, -15.0), vec3(-15.0,  18.0, -18.0),
+        vec3( 15.0,  18.0, -18.0), vec3( 45.0,  15.0, -15.0),
+
+    vec3(-60.0, -15.0,  15.0), vec3(-30.0, -12.0,  12.0),
+    vec3( 30.0, -12.0,  12.0), vec3( 60.0, -15.0,  15.0),
+
+        vec3(-45.0, -40.0,  40.0), vec3(-15.0, -43.0,  43.0),
+        vec3( 15.0, -43.0,  43.0), vec3( 45.0, -40.0,  40.0),
+
+             vec3(-30.0, -65.0,  65.0), vec3(30.0, -65.0,  65.0),
+
+                    vec3(0.0, -90.0, 90.0),
 ];
+
+const SHOOTER_SCALE: f32 = 65.0 / 32.0;
+const SHOOTER_HITBOX: HitBox = HitBox::Box {
+    length: 50.0,
+    width: 50.0,
+};
 
 #[derive(Component)]
 pub struct MainShooter;
@@ -48,13 +65,10 @@ fn spawn_main_shooter(mut commands: Commands, shooter_asset: Res<ShooterAsset>) 
         },
         Transform {
             translation: vec3(0.0, -200.0, 0.0),
-            scale: Vec3::splat(65.0 / 32.0),
+            scale: Vec3::splat(SHOOTER_SCALE),
             ..Default::default()
         },
-        HitBox::Box {
-            length: 50.0,
-            width: 50.0,
-        },
+        SHOOTER_HITBOX,
     ));
 }
 
@@ -68,7 +82,7 @@ fn spawn_shooter(
     let center_position = main_shooter_q.translation;
 
     if let Some(offset) = FORMATION.get(shooters_count - 1) {
-        let world_pos = center_position + offset.extend(0.0);
+        let world_pos = center_position + offset;
 
         commands.spawn((
             Shooter,
@@ -78,13 +92,10 @@ fn spawn_shooter(
             },
             Transform {
                 translation: world_pos,
-                scale: Vec3::splat(50.0 / 32.0),
+                scale: Vec3::splat(SHOOTER_SCALE),
                 ..Default::default()
             },
-            HitBox::Box {
-                length: 50.0,
-                width: 50.0,
-            },
+            SHOOTER_HITBOX,
         ));
     } else {
         // commands.spawn(Shooter);

@@ -68,7 +68,6 @@ fn detect_bullet_collision(
                 z_transform.translation.truncate(),
                 z_hitbox,
             ) {
-                info!("Collision detected");
                 commands.entity(bullet).despawn();
                 commands.entity(zombie).despawn();
                 break;
