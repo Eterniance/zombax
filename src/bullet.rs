@@ -45,6 +45,10 @@ fn spawn_bullets(
                 },
             ));
         }
+        commands.spawn((
+            AudioPlayer::new(asset.sound.clone()),
+            PlaybackSettings::DESPAWN,
+        ));
     }
 }
 

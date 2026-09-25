@@ -20,6 +20,7 @@ pub struct BonusAsset {
 pub struct BulletAsset {
     pub mesh: Handle<Mesh>,
     pub material: Handle<ColorMaterial>,
+    pub sound: Handle<AudioSource>,
 }
 
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
@@ -48,6 +49,8 @@ fn setup_assets(
 
     let white = materials.add(Color::WHITE);
 
+    let shoot_sound = asset_server.load("pew.ogg");
+
     commands.insert_resource(ZombieAsset {
         texture: zombie_texture,
     });
@@ -59,9 +62,10 @@ fn setup_assets(
     commands.insert_resource(BonusAsset {
         texture: bonus_texture,
     });
-
+    
     commands.insert_resource(BulletAsset {
         mesh: circle,
         material: white,
+        sound: shoot_sound,
     });
 }
