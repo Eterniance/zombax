@@ -4,6 +4,9 @@ use bevy::prelude::*;
 #[derive(Resource)]
 pub struct SpawnZombieTimer(pub Timer);
 
+#[derive(Resource)]
+pub struct SpawnZombieBossTimer(pub Timer);
+
 #[derive(Component)]
 pub struct Zombie;
 
@@ -11,8 +14,18 @@ pub struct ZombiePlugin;
 
 impl Plugin for ZombiePlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(SpawnZombieTimer(Timer::from_seconds(0.75, TimerMode::Repeating)))
-            .add_systems(Update, (move_zombies, endless_spawn, despawn_zombies));
+        app.insert_resource(SpawnZombieTimer(Timer::from_seconds(
+            0.75,
+            TimerMode::Repeating,
+        )))
+        .insert_resource(SpawnZombieBossTimer(Timer::from_seconds(
+            10.0,
+            TimerMode::Repeating,
+        )))
+        .add_systems(
+            Update,
+            (move_zombies, endless_spawn, spawn_bosses, despawn_zombies),
+        );
     }
 }
 
@@ -22,7 +35,6 @@ fn endless_spawn(
     mut timer: ResMut<SpawnZombieTimer>,
     zombie_asset: Res<ZombieAsset>,
 ) {
-
     if timer.0.tick(time.delta()).just_finished() {
         for x in linspace(-200.0, 200.0, 20) {
             commands.spawn((
@@ -40,6 +52,30 @@ fn endless_spawn(
                 HitBox::Circle { radius: 16.0 },
             ));
         }
+    }
+}
+
+fn spawn_bosses(
+    mut commands: Commands,
+    time: Res<Time>,
+    mut timer: ResMut<SpawnZombieBossTimer>,
+    zombie_asset: Res<ZombieAsset>,
+) {
+    if timer.0.tick(time.delta()).just_finished() {
+        commands.spawn((
+            Zombie,
+            Health::new(80),
+            Sprite {
+                image: zombie_asset.texture.clone(),
+                ..default()
+            },
+            Transform {
+                translation: vec3(0.0, 400.0, 0.0),
+                scale: Vec3::splat(150.0 / 32.0),
+                ..default()
+            },
+            HitBox::Circle { radius: 48.0 },
+        ));
     }
 }
 
