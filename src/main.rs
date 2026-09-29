@@ -3,12 +3,7 @@ use bevy::{
     prelude::*,
 };
 use zombax::{
-    assets::{AssetInitSet, AssetsPlugin},
-    bonus::BonusPlugin,
-    bullet::BulletPlugin,
-    debug::DebugPlugin,
-    shooter::ShooterPlugin,
-    zombie::ZombiePlugin,
+    assets::{AssetInitSet, AssetsPlugin}, bonus::BonusPlugin, bullet::BulletPlugin, debug::DebugPlugin, health::HealthPlugin, shooter::ShooterPlugin, zombie::ZombiePlugin,
 };
 fn main() {
     App::new()
@@ -19,7 +14,7 @@ fn main() {
             // EntityCountDiagnosticsPlugin::default(),
         ))
         .add_plugins(AssetsPlugin)
-        .add_plugins((ZombiePlugin, BonusPlugin, ShooterPlugin, BulletPlugin))
+        .add_plugins((ZombiePlugin, BonusPlugin, ShooterPlugin, BulletPlugin, HealthPlugin))
         .add_plugins(DebugPlugin)
         .add_systems(Startup, setup.after(AssetInitSet))
         .run();

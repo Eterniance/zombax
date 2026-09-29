@@ -1,8 +1,5 @@
 use crate::{
-    assets::BulletAsset,
-    collisions::{HitBox, collides},
-    shooter::Shooter,
-    zombie::Zombie,
+    assets::BulletAsset, collisions::{HitBox, collides}, health::Damage, shooter::Shooter, zombie::Zombie,
 };
 use bevy::prelude::*;
 
@@ -63,6 +60,7 @@ fn detect_bullet_collision(
     mut commands: Commands,
     bullet_query: Query<(Entity, &Transform, &HitBox), With<Bullet>>,
     zombie_query: Query<(Entity, &Transform, &HitBox), With<Zombie>>,
+    mut message_sender: MessageWriter<Damage>,
 ) {
     for (bullet, b_transform, b_hitbox) in &bullet_query {
         for (zombie, z_transform, z_hitbox) in &zombie_query {
@@ -73,7 +71,7 @@ fn detect_bullet_collision(
                 z_hitbox,
             ) {
                 commands.entity(bullet).despawn();
-                commands.entity(zombie).despawn();
+                message_sender.write(Damage { target: zombie, amount: 1 });
                 break;
             }
         }

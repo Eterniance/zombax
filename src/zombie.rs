@@ -1,4 +1,4 @@
-use crate::{assets::ZombieAsset, collisions::HitBox};
+use crate::{assets::ZombieAsset, collisions::HitBox, health::Health};
 use bevy::prelude::*;
 
 #[derive(Resource)]
@@ -27,6 +27,7 @@ fn endless_spawn(
         for x in linspace(-200.0, 200.0, 20) {
             commands.spawn((
                 Zombie,
+                Health::new(1),
                 Sprite {
                     image: zombie_asset.texture.clone(),
                     ..default()
