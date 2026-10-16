@@ -8,6 +8,11 @@ pub struct SpawnZombieTimer(pub Timer);
 pub struct SpawnZombieBossTimer(pub Timer);
 
 #[derive(Component)]
+pub struct WalkAnimation {
+    timer: Timer,
+}
+
+#[derive(Component)]
 pub struct Zombie;
 
 pub struct ZombiePlugin;
@@ -24,7 +29,13 @@ impl Plugin for ZombiePlugin {
         )))
         .add_systems(
             Update,
-            (move_zombies, endless_spawn, spawn_bosses, despawn_zombies),
+            (
+                move_zombies,
+                endless_spawn,
+                spawn_bosses,
+                animate_zombies,
+                despawn_zombies,
+            ),
         );
     }
 }
@@ -39,17 +50,24 @@ fn endless_spawn(
         for x in linspace(-200.0, 200.0, 20) {
             commands.spawn((
                 Zombie,
-                Health::new(1),
                 Sprite {
                     image: zombie_asset.texture.clone(),
+                    texture_atlas: Some(TextureAtlas {
+                        layout: zombie_asset.layout.clone(),
+                        index: 0,
+                    }),
                     ..default()
                 },
+                WalkAnimation {
+                    timer: Timer::from_seconds(0.15, TimerMode::Repeating),
+                },
+                Health::new(1),
+                HitBox::Circle { radius: 16.0 },
                 Transform {
                     translation: vec3(x, 400.0, 0.0),
                     scale: Vec3::splat(50.0 / 32.0),
                     ..default()
                 },
-                HitBox::Circle { radius: 16.0 },
             ));
         }
     }
@@ -76,6 +94,18 @@ fn spawn_bosses(
             },
             HitBox::Circle { radius: 48.0 },
         ));
+    }
+}
+
+fn animate_zombies(time: Res<Time>, mut query: Query<(&mut Sprite, &mut WalkAnimation)>) {
+    for (mut sprite, mut animation) in &mut query {
+        animation.timer.tick(time.delta());
+
+        if animation.timer.just_finished()
+            && let Some(atlas) = &mut sprite.texture_atlas
+        {
+            atlas.index = (atlas.index + 1) % 2;
+        }
     }
 }
 

@@ -4,6 +4,7 @@ use bevy::prelude::*;
 #[derive(Resource)]
 pub struct ZombieAsset {
     pub texture: Handle<Image>,
+    pub layout: Handle<TextureAtlasLayout>,
 }
 
 #[derive(Resource)]
@@ -40,8 +41,12 @@ fn setup_assets(
     asset_server: Res<AssetServer>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
+    mut texture_atlases: ResMut<Assets<TextureAtlasLayout>>,
 ) {
-    let zombie_texture = asset_server.load("zombax1.png");
+    let zombie_texture = asset_server.load("zombax.png");
+    let layout = TextureAtlasLayout::from_grid(UVec2::new(32, 32), 2, 1, None, None);
+    let zombie_layout_handle = texture_atlases.add(layout);
+
     let bonus_texture = asset_server.load("bonus_plus_1.png");
     let shooter_texture = asset_server.load("shooter1.png");
 
@@ -53,6 +58,7 @@ fn setup_assets(
 
     commands.insert_resource(ZombieAsset {
         texture: zombie_texture,
+        layout: zombie_layout_handle,
     });
 
     commands.insert_resource(ShooterAsset {
@@ -62,7 +68,7 @@ fn setup_assets(
     commands.insert_resource(BonusAsset {
         texture: bonus_texture,
     });
-    
+
     commands.insert_resource(BulletAsset {
         mesh: circle,
         material: white,
