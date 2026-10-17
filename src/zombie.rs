@@ -85,7 +85,14 @@ fn spawn_bosses(
             Health::new(80),
             Sprite {
                 image: zombie_asset.texture.clone(),
+                texture_atlas: Some(TextureAtlas {
+                    layout: zombie_asset.layout.clone(),
+                    index: 0,
+                }),
                 ..default()
+            },
+            WalkAnimation {
+                timer: Timer::from_seconds(0.15, TimerMode::Repeating),
             },
             Transform {
                 translation: vec3(0.0, 400.0, 0.0),
