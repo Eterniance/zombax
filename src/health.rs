@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::zombie::Boss;
+
 #[derive(Component)]
 pub struct Health {
     pub max: u32,
@@ -12,6 +14,11 @@ impl Health {
     }
 }
 
+#[derive(Component)]
+pub struct HealthBar {
+    pub max_width: f32,
+}
+
 #[derive(Message)]
 pub struct Damage {
     pub target: Entity,
@@ -22,8 +29,13 @@ pub struct HealthPlugin;
 
 impl Plugin for HealthPlugin {
     fn build(&self, app: &mut App) {
-        app.add_message::<Damage>()
-            .add_systems(Update, apply_damage.run_if(on_message::<Damage>));
+        app.add_message::<Damage>().add_systems(
+            Update,
+            (
+                apply_damage.run_if(on_message::<Damage>),
+                update_health_bar.run_if(on_message::<Damage>),
+            ),
+        );
     }
 }
 
@@ -41,5 +53,19 @@ fn apply_damage(
                 health.current = remaining;
             }
         }
+    }
+}
+
+fn update_health_bar(
+    mut bars: Query<(&ChildOf, &mut Transform)>,
+    bosses: Query<&Health, With<Boss>>,
+) {
+    for (child, mut transform) in bars.iter_mut() {
+        let Ok(health) = bosses.get(child.parent()) else {
+            continue;
+        };
+
+        let ratio = health.current as f32 / health.max as f32;
+        transform.scale.x = ratio;
     }
 }

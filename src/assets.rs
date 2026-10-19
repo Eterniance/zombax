@@ -24,6 +24,12 @@ pub struct BulletAsset {
     pub sound: Handle<AudioSource>,
 }
 
+#[derive(Resource)]
+pub struct HealthBarAsset {
+    pub mesh: Handle<Mesh>,
+    pub health_material: Handle<ColorMaterial>,
+}
+
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
 pub struct AssetInitSet;
 
@@ -52,6 +58,9 @@ fn setup_assets(
 
     let circle = meshes.add(Circle::new(BULLET_RADIUS));
 
+    let rectangle = meshes.add(Rectangle::new(20.0, 2.5));
+
+    let red = materials.add(Color::srgb(1.0, 0.0, 0.1));
     let white = materials.add(Color::WHITE);
 
     let shoot_sound = asset_server.load("pew.ogg");
@@ -74,4 +83,9 @@ fn setup_assets(
         material: white,
         sound: shoot_sound,
     });
+
+    commands.insert_resource( HealthBarAsset {
+        mesh: rectangle,
+        health_material: red,
+    })
 }

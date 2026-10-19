@@ -1,4 +1,8 @@
-use crate::{assets::ZombieAsset, collisions::HitBox, health::Health};
+use crate::{
+    assets::{HealthBarAsset, ZombieAsset},
+    collisions::HitBox,
+    health::{Health, HealthBar},
+};
 use bevy::prelude::*;
 
 #[derive(Resource)]
@@ -14,6 +18,9 @@ pub struct WalkAnimation {
 
 #[derive(Component)]
 pub struct Zombie;
+
+#[derive(Component)]
+pub struct Boss;
 
 pub struct ZombiePlugin;
 
@@ -78,29 +85,38 @@ fn spawn_bosses(
     time: Res<Time>,
     mut timer: ResMut<SpawnZombieBossTimer>,
     zombie_asset: Res<ZombieAsset>,
+    healthbar_asset: Res<HealthBarAsset>,
 ) {
     if timer.0.tick(time.delta()).just_finished() {
-        commands.spawn((
-            Zombie,
-            Health::new(80),
-            Sprite {
-                image: zombie_asset.texture.clone(),
-                texture_atlas: Some(TextureAtlas {
-                    layout: zombie_asset.layout.clone(),
-                    index: 0,
-                }),
-                ..default()
-            },
-            WalkAnimation {
-                timer: Timer::from_seconds(0.15, TimerMode::Repeating),
-            },
-            Transform {
-                translation: vec3(0.0, 400.0, 0.0),
-                scale: Vec3::splat(150.0 / 32.0),
-                ..default()
-            },
-            HitBox::Circle { radius: 48.0 },
-        ));
+        commands
+            .spawn((
+                Zombie,
+                Boss,
+                Health::new(20),
+                Sprite {
+                    image: zombie_asset.texture.clone(),
+                    texture_atlas: Some(TextureAtlas {
+                        layout: zombie_asset.layout.clone(),
+                        index: 0,
+                    }),
+                    ..default()
+                },
+                WalkAnimation {
+                    timer: Timer::from_seconds(0.15, TimerMode::Repeating),
+                },
+                Transform {
+                    translation: vec3(0.0, 200.0, 0.0),
+                    scale: Vec3::splat(150.0 / 32.0),
+                    ..default()
+                },
+                HitBox::Circle { radius: 48.0 },
+            ))
+            .with_child((
+                HealthBar { max_width: 10.0 },
+                Transform::from_translation(vec3(-2.5, 20.0, 1.0)),
+                Mesh2d(healthbar_asset.mesh.clone()),
+                MeshMaterial2d(healthbar_asset.health_material.clone()),
+            ));
     }
 }
 
